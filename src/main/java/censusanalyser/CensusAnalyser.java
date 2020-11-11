@@ -8,21 +8,19 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
 	public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
 		int noOfEateries = 0;
-		try {
-			Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		try(Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
 			csvToBeanBuilder.withType(IndiaCensusCSV.class);
 			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
 			CsvToBean<IndiaCensusCSV> csvToBean = csvToBeanBuilder.build();
-			Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();
-			while (censusCSVIterator.hasNext()) {
-				noOfEateries++;
-				IndiaCensusCSV censusData = censusCSVIterator.next();
-			}
+			Iterator<IndiaCensusCSV> iterator = csvToBean.iterator();
+			Iterable<IndiaCensusCSV> iterable = () -> iterator;
+			noOfEateries = (int) StreamSupport.stream(iterable.spliterator(), false).count();
 		} catch (NoSuchFileException e) {
 			if (!csvFilePath.contains(".csv")) {
 				throw new CensusAnalyserException(e.getMessage(),
@@ -39,8 +37,7 @@ public class CensusAnalyser {
 
 	public int loadIndiaCodeData(String csvFilePath) throws CensusAnalyserException {
 		int noOfEateries = 0;
-		try {
-			Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		try(Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			CsvToBeanBuilder<IndiaCodeCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
 			csvToBeanBuilder.withType(IndiaCodeCSV.class);
 			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
