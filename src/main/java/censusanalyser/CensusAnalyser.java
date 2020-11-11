@@ -14,9 +14,9 @@ public class CensusAnalyser {
 	public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
 		int noOfEateries = 0;
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-			Iterator<IndiaCensusCSV> iterator = new OpenCSVBuilder().getCSVFileIterator(reader, IndiaCensusCSV.class);
-			Iterable<IndiaCensusCSV> iterable = () -> iterator;
-			noOfEateries = (int) StreamSupport.stream(iterable.spliterator(), false).count();
+			ICSVBuilder csvBuilder = CSVBuilderFactoy.createCsvBuilder();
+			Iterator<IndiaCensusCSV> iterator = csvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
+			return this.getCount(iterator);
 		} catch (NoSuchFileException e) {
 			if (!csvFilePath.contains(".csv")) {
 				throw new CensusAnalyserException(e.getMessage(),
@@ -32,7 +32,9 @@ public class CensusAnalyser {
 	public int loadIndiaCodeData(String csvFilePath) throws CensusAnalyserException {
 		int noOfEateries = 0;
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-			Iterator<IndiaCodeCSV> iterator = new OpenCSVBuilder().getCSVFileIterator(reader, IndiaCodeCSV.class);
+			ICSVBuilder csvBuilder = CSVBuilderFactoy.createCsvBuilder();
+			Iterator<IndiaCodeCSV> iterator = csvBuilder.getCSVFileIterator(reader, IndiaCodeCSV.class);
+			return this.getCount(iterator);
 		} catch (NoSuchFileException e) {
 			if (!csvFilePath.contains(".csv")) {
 				throw new CensusAnalyserException(e.getMessage(),
