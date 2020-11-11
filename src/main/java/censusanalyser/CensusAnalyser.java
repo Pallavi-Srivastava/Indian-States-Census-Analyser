@@ -33,8 +33,6 @@ public class CensusAnalyser {
 		int noOfEateries = 0;
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			Iterator<IndiaCodeCSV> iterator = this.getCSVFileIterator(reader, IndiaCodeCSV.class);
-			Iterable<IndiaCodeCSV> iterable = () -> iterator;
-			noOfEateries = (int) StreamSupport.stream(iterable.spliterator(), false).count();
 		} catch (NoSuchFileException e) {
 			if (!csvFilePath.contains(".csv")) {
 				throw new CensusAnalyserException(e.getMessage(),
@@ -44,6 +42,12 @@ public class CensusAnalyser {
 			throw new CensusAnalyserException(e.getMessage(),
 					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
 		}
+		return noOfEateries;
+	}
+
+	private <E> int getCount(Iterator<E> iterator) {
+		Iterable<E> csvIterable = () -> iterator;
+		int noOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
 		return noOfEateries;
 	}
 
