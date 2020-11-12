@@ -2,11 +2,13 @@ package censusanalyser;
 
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.List;
+
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class OpenCSVBuilder<E> implements ICSVBuilder {
-	public Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException {
+	public Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CSVBuilderException {
 		try {
 			CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
 			csvToBeanBuilder.withType(csvClass);
@@ -14,8 +16,7 @@ public class OpenCSVBuilder<E> implements ICSVBuilder {
 			CsvToBean<E> csvToBean = csvToBeanBuilder.build();
 			return csvToBean.iterator();
 		} catch (RuntimeException e) {
-			throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.NO_SUCH_FILE);
+			throw new CSVBuilderException(e.getMessage(), CensusAnalyserException.ExceptionType.NO_SUCH_FIELD);
 		}
 	}
-
 }
