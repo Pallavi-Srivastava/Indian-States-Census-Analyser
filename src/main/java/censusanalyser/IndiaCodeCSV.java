@@ -18,7 +18,6 @@ public class IndiaCodeCSV {
 
 	@Override
 	public String toString() {
-		return "IndiaCodeCSV [srNo=" + srNo + ", stateName=" + stateName + ", tin=" + tin + ", stateCode=" + stateCode
-				+ "]";
+		return "IndiaCodeCSV [srNo=" + srNo + ", stateName=" + stateName + ", tin=" + tin + ", stateCode=" + stateCode + "]";
 	}
 }
