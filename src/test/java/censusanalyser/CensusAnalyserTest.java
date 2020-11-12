@@ -129,7 +129,7 @@ public class CensusAnalyserTest {
 		try {
 			ExpectedException exceptionRule = ExpectedException.none();
 			exceptionRule.expect(CensusAnalyserException.class);
-			censusAnalyser.loadIndiaCodeData(WITHOUT_HEADER_FILE_PATH);
+			censusAnalyser.loadIndiaCodeData(CODE_WITHOUT_HEADER_FILE_PATH);
 		} catch (CensusAnalyserException censusAnalyserException) {
 			Assert.assertEquals(CensusAnalyserException.ExceptionType.NO_SUCH_FILE, censusAnalyserException.type);
 		}
